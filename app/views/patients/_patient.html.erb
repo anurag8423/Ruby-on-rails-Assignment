@@ -1,0 +1,47 @@
+<div id="<%= dom_id patient %>" class="card">
+  <div class="card-header">
+    <h4 class="text-center"><% patient.name %></h4>
+  </div>
+
+
+  <p>
+    <strong>Gender:</strong>
+    <%= patient.gender %>
+  </p>
+
+  <p>
+    <strong>Date of Birth:</strong>
+    <%= patient.dob.strftime("%B %d, %Y") rescue 'N/A' %>
+  </p>
+
+  <p>
+    <strong>Age:</strong>
+    <%= patient.age || 'N/A' %>
+  </p>
+
+  <p>
+    <strong>Phone:</strong>
+    <%= patient.phone %>
+  </p>
+
+  <p>
+    <strong>Blood Type:</strong>
+    <%= patient.blood_type || 'Not specified' %>
+  </p>
+
+  <p>
+    <strong>Allergies:</strong>
+    <%= patient.allergies.present? ? patient.allergies : 'None recorded' %>
+  </p>
+
+  <p>
+    <strong>Symptom:</strong>
+    <%= patient.symptom.present? ? patient.symptom : 'Not specified' %>
+  </p>
+
+  <p>
+    <strong>Bill:</strong>
+    <%= patient.bill %>
+  </p>
+
+</div>

@@ -1,0 +1,101 @@
+<!-- app/views/patients/show.html.erb -->
+<div class="container py-5">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4 text-dark"><%= @patient.name %></h1>
+        <% if user_signed_in? && current_user.role == 'Receptionist' %>
+          <%= link_to 'Edit Patient', edit_patient_path(@patient), class: 'btn btn-outline-dark' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Left Column - Personal Details -->
+    <div class="col-md-6 mb-4">
+      <div class="card border-dark">
+        <div class="card-header bg-light text-dark">
+          <h5 class="mb-0">👤 Personal Information</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-sm-4 text-muted">Date of Birth:</dt>
+            <dd class="col-sm-8"><%= @patient.dob.strftime("%B %d, %Y") %></dd>
+
+            <dt class="col-sm-4 text-muted">Gender:</dt>
+            <dd class="col-sm-8"><%= @patient.gender %></dd>
+
+            <dt class="col-sm-4 text-muted">Contact:</dt>
+            <dd class="col-sm-8"><%= @patient.phone %></dd>
+
+            <dt class="col-sm-4 text-muted">Age:</dt>
+            <dd class="col-sm-8"><%= @patient.age || 'N/A' %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column - Medical Information -->
+    <div class="col-md-6 mb-4">
+      <div class="card border-dark">
+        <div class="card-header bg-light text-dark">
+          <h5 class="mb-0">🏥 Medical Details</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-sm-4 text-muted">Blood Type:</dt>
+            <dd class="col-sm-8">
+              <span class="badge bg-dark text-white"><%= @patient.blood_type %></span>
+            </dd>
+
+            <dt class="col-sm-4 text-muted">Allergies:</dt>
+            <dd class="col-sm-8"><%= @patient.allergies.presence || 'None recorded' %></dd>
+
+            <dt class="col-sm-4 text-muted">Symptoms:</dt>
+            <dd class="col-sm-8"><%= @patient.symptom %></dd>
+
+            <dt class="col-sm-4 text-muted">Last Updated:</dt>
+            <dd class="col-sm-8"><%= @patient.updated_at.strftime("%b %d, %Y %H:%M") %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Actions -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between">
+        <%= link_to patients_path, class: 'btn btn-outline-dark' do %>
+          ← Back to List
+        <% end %>
+        <% if user_signed_in? && current_user.role == 'Receptionist' %>
+          <%= button_to 'Delete Patient', @patient, method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn-dark' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Minimal Styling */
+  .card {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    border-radius: 4px;
+  }
+  
+  .card-header {
+    border-bottom: 2px solid #dee2e6;
+  }
+  
+  .text-muted {
+    color: #6c757d !important;
+  }
+  
+  .badge {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+</style>
+

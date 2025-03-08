@@ -1,0 +1,87 @@
+<% if user_signed_in? && current_user.role.downcase == 'doctor' %>
+  <div class="container mt-5">
+    <h2 class="mb-4">Patient Registration Statistics</h2>
+    
+    <div class="row justify-content-center">
+      <div class="col-md-10 col-lg-8">
+        <div class="card shadow">
+          <div class="card-body">
+            <canvas id="patientChart" style="height:25em;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const rawData = <%= @patients_by_date.to_json.html_safe %>;
+      const dates = Object.keys(rawData);
+      const counts = Object.values(rawData);
+
+      const maxPatients = Math.max(...counts, 1); // Ensure at least 1
+      const yMax = maxPatients + 1;
+
+      const ctx = document.getElementById('patientChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: dates,
+          datasets: [{
+            label: 'Patients Registered',
+            data: counts,
+            backgroundColor: '#4e73df',
+            borderColor: '#4e73df',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Registration Date'
+              },
+              grid: {
+                display: false
+              },
+              ticks: {
+                autoSkip: true,
+                maxTicksLimit: 10
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Number of Patients'
+              },
+              beginAtZero: true,
+              max: yMax, // Add this line
+              ticks: {
+                callback: function(value) { return Number.isInteger(value) ? value : ''; },
+                stepSize: 1,
+                precision: 0
+              },
+              grace: '0%'
+            }
+          },
+          // Correctly placed bar width controls
+          barPercentage: 0.2,
+          categoryPercentage: 0.6
+        }
+      });
+    });
+  </script>
+<% else %>
+  <div class="alert alert-danger mt-5">
+    You are not authorized to view this page.
+  </div>
+<% end %>

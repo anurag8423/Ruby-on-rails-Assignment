@@ -1,0 +1,76 @@
+<%= form_with(model: patient) do |form| %>
+  <% if patient.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(patient.errors.count, "error") %> prohibited this patient from being saved:</h2>
+
+      <ul>
+        <% patient.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name, class:"form-control" , placeholder:"Patient's Name" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :gender, style: "display: block" %>
+    <%= form.text_field :gender, class:"form-control" , placeholder:"Patient's Gender" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :dob, "Date of Birth" %>
+    <%= form.date_field :dob, 
+        class: "form-control", 
+        max: Date.today, 
+        value: form.object.dob || 30.years.ago.to_date %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :age, style: "display: block" %>
+    <%= form.number_field :age, class:"form-control" , placeholder:"Patient's Age" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :phone, style: "display: block" %>
+    <%= form.text_field :phone, class:"form-control" , placeholder:"Patient's Phone Number" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :blood_type %>
+    <%= form.select :blood_type, 
+        options_for_select(
+          ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Unknown'], 
+          form.object.blood_type
+        ), 
+        { include_blank: true }, 
+        class:"form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :allergies %>
+    <%= form.text_area :allergies, 
+        class: "form-control", 
+        placeholder: "List all allergies (comma separated)", 
+        rows: 2 %>
+  </div>
+
+  <div class="form-group" >
+    <%= form.label :symptom, style: "display: block" %>
+    <%= form.text_area :symptom, class:"form-control" , placeholder:"List of all Symptoms (Comma Separated)", rows: 2 %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :bill, style: "display: block" %>
+    <%= form.number_field :bill, class:"form-control" , placeholder:"Current Bill Amount" %>
+  </div>
+  
+  
+
+  <div class="form-group">
+    <%= form.submit class:'btn btn-secondary' %>
+  </div>
+<% end %>
